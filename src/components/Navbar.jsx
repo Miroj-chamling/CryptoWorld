@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Menu, Typography, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import {
@@ -10,25 +10,50 @@ import {
 } from "@ant-design/icons";
 
 const Navbar = () => {
+  const [activeMenu, setActiveMenu] = useState();
+  const [screenSize, setScreenSize] = useState(null);
+
+  useEffect(() => {
+    const handleResize = () => setScreenSize(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  });
+
+  useEffect(() => {
+    if (screenSize < 768) {
+      setActiveMenu(false);
+    } else {
+      setActiveMenu(true);
+    }
+  }, [screenSize]);
+
   return (
     <div className="nav-container">
       <div className="logo-container">
         <Typography.Title level={2} className="logo">
           <Link to="/">CryptoWorld</Link>
         </Typography.Title>
-        {/* <Button className="menu-control-container"> </Button> */}
+        <Button
+          className="menu-control-container"
+          onClick={() => setActiveMenu(true)}
+        >
+          <MenuOutlined />
+        </Button>
       </div>
-      <Menu mode="horizontal" theme="dark">
-        <Menu.Item icon={<HomeOutlined />}>
-          <Link to="/">Home</Link>
-        </Menu.Item>
-        <Menu.Item icon={<FundOutlined />}>
-          <Link to="/cryptocurrencies">Cryptocurrencies</Link>
-        </Menu.Item>
-        <Menu.Item icon={<BulbOutlined />}>
-          <Link to="/news">News</Link>
-        </Menu.Item>
-      </Menu>
+      {activeMenu && (
+        <Menu mode="horizontal" theme="dark">
+          <Menu.Item icon={<HomeOutlined />}>
+            <Link to="/">Home</Link>
+          </Menu.Item>
+          <Menu.Item icon={<FundOutlined />}>
+            <Link to="/cryptocurrencies">Cryptocurrencies</Link>
+          </Menu.Item>
+          <Menu.Item icon={<BulbOutlined />}>
+            <Link to="/news">News</Link>
+          </Menu.Item>
+        </Menu>
+      )}
     </div>
   );
 };
