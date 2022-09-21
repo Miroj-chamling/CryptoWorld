@@ -1,6 +1,6 @@
 # CryptoWorld
 
-An crypto news app for all the tech enthusiast.
+An crypto news app for all the crypto enthusiast.
 
 ## Tools Used
 
